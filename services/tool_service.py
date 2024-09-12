@@ -64,7 +64,7 @@ class Tools:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         print(f"----------Current directory: {current_dir}----------")
         # Create the full path for the new file
-        full_file_path = os.path.join(current_dir, file_path, f"{file_name}{file_extension}")
+        full_file_path = os.path.join(current_dir, f"{file_path}")
         print(f"----------Creating file at path: {full_file_path}----------")
         
         try:
@@ -73,11 +73,10 @@ class Tools:
             # Create the file
             with open(full_file_path, 'w') as f:
                 pass  # Create an empty file
-            return f"Success: File '{file_name}{file_extension}' has been created at {full_file_path}."
+            return f"Success: File '{file_path}' has been created at {full_file_path}."
         except OSError as e:
             print(f"----------Error creating file: {e}----------")
-            return f"Error: Failed to create file '{file_name}{file_extension}' at {full_file_path}."
-        
+            return f"Error: Failed to create file '{file_path}' at {full_file_path}."
 
 # This class can be called to process the tool use and call the required tool and return the tool result
 class ToolsHandler:

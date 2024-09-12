@@ -53,7 +53,8 @@ class AnthropicChat:
 
         print(f"Tool Name: {tool_use.name}")
         
-        DataService.save_message(chat_id, "assistant", content=response.content[0].text, tool_use_id=tool_use.id, tool_use_input=tool_use.input, tool_name=tool_use.name)
+        content = response.content[0].text if hasattr(response.content[0], 'text') else str(response.content[0])
+        DataService.save_message(chat_id, "assistant", content=content, tool_use_id=tool_use.id, tool_use_input=tool_use.input, tool_name=tool_use.name)
 
         tool_result = ToolsHandler.process_tool_use(tool_use.name, tool_use.input, tool_use.id, chat_id)
 
