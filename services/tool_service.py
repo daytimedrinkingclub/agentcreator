@@ -3,7 +3,6 @@ import re
 import json
 from .data_service import DataService
 from .search_service import SearchService
-from .anthropic_service import AnthropicService
 
 # This class is called by the Toolhandler function
 class Tools:
@@ -21,23 +20,23 @@ class Tools:
         return tools
     
     @staticmethod
-    def write_to_file(file_name, file_path, file_extension, content):
-        # Ensure the file has a .txt extension
-        if not file_name.endswith(file_extension):
-            file_name += file_extension
-        
-        file_content = f"{content}"
+    def write_to_file(file_path, content):
         # Get the current directory
         current_dir = os.path.dirname(os.path.abspath(__file__))
         print(f"----------Current directory: {current_dir}----------")
-        # Create the full file path
-        file_path = os.path.join(current_dir, file_path, file_name)
-        print(f"----------File created at path: {file_path}----------")
-        # Create and write to the text file
-        with open(file_path, "w", encoding="utf-8") as file:
-            file.write(file_content)
         
-        return f"File '{file_name}' has been created in the current directory and the content has been written successfully."
+        # Create the full file path
+        full_file_path = os.path.join(current_dir, file_path)
+        print(f"----------Writing to file: {full_file_path}----------")
+        
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(full_file_path), exist_ok=True)
+        
+        # Write the content to the file
+        with open(full_file_path, "w", encoding="utf-8") as file:
+            file.write(content)
+        
+        return f"Success: File '{file_path}' has been created and the content has been written successfully."
 
 
     # this function is used to create a new project folder
@@ -60,12 +59,24 @@ class Tools:
         
     # this function is used to create files within a project folder
     @staticmethod
-    def create_file_in_project(project_name, file_name, file_path, file_extension, content):
+    def create_file_in_project(file_path, file_name, file_extension):
         # Get the current directory
         current_dir = os.path.dirname(os.path.abspath(__file__))
         print(f"----------Current directory: {current_dir}----------")
-        # Create the full path for the new folder
-        folder_path = os.path.join(current_dir, project_name)
+        # Create the full path for the new file
+        full_file_path = os.path.join(current_dir, file_path, f"{file_name}{file_extension}")
+        print(f"----------Creating file at path: {full_file_path}----------")
+        
+        try:
+            # Ensure the directory exists
+            os.makedirs(os.path.dirname(full_file_path), exist_ok=True)
+            # Create the file
+            with open(full_file_path, 'w') as f:
+                pass  # Create an empty file
+            return f"Success: File '{file_name}{file_extension}' has been created at {full_file_path}."
+        except OSError as e:
+            print(f"----------Error creating file: {e}----------")
+            return f"Error: Failed to create file '{file_name}{file_extension}' at {full_file_path}."
         
 
 # This class can be called to process the tool use and call the required tool and return the tool result
@@ -75,27 +86,13 @@ class ToolsHandler:
         print(f"----------process_tool_use functioned called----------")
         if tool_name == "code_writer":
             print(f"----------Calling code_writer tool----------")
-            user_message = f"{tool_input['file_path'], tool_input['file_name'], tool_input['file_extension'], tool_input['code']}"
-            result = AnthropicService.call_anthropic(tool_name, user_message)
-            DataService.save_message(chat_id, "user", content=result, tool_use_id=tool_use_id, tool_result=result)
-            return result
-        
-        elif tool_name == "search_tool":
-            print(f"----------Calling search_tool tool----------")
-            result = SearchService.search(tool_input["query"])
+            result = Tools.write_to_file(tool_input['file_path'], tool_input['code'])
             DataService.save_message(chat_id, "user", content=result, tool_use_id=tool_use_id, tool_result=result)
             return result
         
         elif tool_name == "file_creator":
             print(f"----------Calling file_creator tool----------")
-            user_message = f"{tool_input['project_name'], tool_input['file_name'], tool_input['file_path'], tool_input['file_extension']}"
-            result = Tools.create_file_in_project(tool_input["project_name"], tool_input["file_name"], tool_input["file_path"], tool_input["file_extension"])
-            DataService.save_message(chat_id, "user", content=result, tool_use_id=tool_use_id, tool_result=result)
-            return result
-        
-        elif tool_name == "readme_writer":
-            print(f"----------Calling readme_writer tool----------")
-            result = Tools.write_to_file(tool_input["project_name"], tool_input["readme_file_content"])
+            result = Tools.create_file_in_project(tool_input["file_path"], tool_input["file_name"], tool_input["file_extension"])
             DataService.save_message(chat_id, "user", content=result, tool_use_id=tool_use_id, tool_result=result)
             return result
         

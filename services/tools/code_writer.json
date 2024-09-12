@@ -11,13 +11,9 @@
         "code": {
             "type": "string",
             "description": "The code to be written in the file"
-        },
-        "language": {
-            "type": "string",
-            "description": "The language of the code to be written the languages allowed are python java script, html and custom css if needed"
         }
       },
-      "required": ["file_path", "code", "language"]
+      "required": ["file_path", "code"]
 
     }
 }

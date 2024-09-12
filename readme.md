@@ -15,11 +15,9 @@
     - main.py # main application file
     - config.py # configuration file
     - extensions.py # extension file
-    - models.py # models file
-    - routes.py # routes file
+    - models/
+    - routes/
+    - services/
     - agent.py # the Anthropic ai agent
-    - output/ # folder to store the output of the ai agent
-        - projecta/ # the projects that will be created by the AI agent
-        - projectb/ # sample project name and folder
-
+    - requirements.txt # dependencies
 ```

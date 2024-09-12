@@ -23,10 +23,20 @@ class AnthropicChat:
             system=
             """
             Today is {today}.\n
-            You are tasked to help the user with their day to day coding requirements.
+            Your task is to create small flask apps, the user will provide with the details of the flask app to be created \n
+            You need to use the available tools to create the flask app, first create the project folder \n
+            Then create create all the required files \n
+            Use the fle paths returned by the file_creator tool to write the code in the files \n
+            Always start with the the readme file, write the basic details of the project in the readme file \n
+            Then create a readme file with the basic details of the project \n
+            Then one by one write code in the files that have been created \n
+            Once All the code has been written create a docker file to containerize the flask app \n
+            Then create the code for the docker file \n
+            Then create a requirements file \n
+            Pass the requirement names without the version number of the requirements
             """,
             tools=tools,
-            # tool_choice={"type": "auto"},
+            tool_choice={"type": "auto"},
             messages=conversation,
         )
         print(f"Response Received from ANTHROPIC API: {response}")
@@ -58,15 +68,7 @@ class AnthropicChat:
 
     @staticmethod
     def handle_chat(chat_id: str, user_message: str) -> str:
-        prompt = """
-        Today is {today}.\n
-        Your task is to create small flask apps, the user will provide with the details of the flask app to be created \n
-        You need to use the available tools to create the flask app, first create the project folder \n
-        Then create a readme file with the basic details of the project \n
-        Then create create all the required files with comments in the file which will help later AI code writing agents to write the code within them \n
-        Then call the code writing agents with the file names and descriptions of the code to be created so that the files can be created
-        """
-        DataService.save_message(chat_id, "user", content=f'{prompt} {user_message}')
+        DataService.save_message(chat_id, "user", content=f'{user_message}')
         # Process the conversation
         response = AnthropicChat.process_conversation(chat_id)
         # Extract the text content from the response
