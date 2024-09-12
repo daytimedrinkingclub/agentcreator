@@ -1,0 +1,14 @@
+{
+    "name": "project_creator",
+    "description": "This tool can be called when we need to create a new project, this tool needs to be passed the project name and project ",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "project_name": { 
+            "type": "string", 
+            "description": "The name of the project to be created"
+        }
+      },
+      "required": ["project_name"]
+    }
+}

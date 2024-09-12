@@ -1,0 +1,23 @@
+{
+    "name": "code_writer",
+    "description": "This tool is used to write code for a file of a project, this tool will write any code that is needed, but we need to stick to python flask framework with jinja2 templating engine and bootstrap for styling",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "file_path": { 
+            "type": "string", 
+            "description": "The path to the file where the code should be written to"
+        },
+        "code": {
+            "type": "string",
+            "description": "The code to be written in the file"
+        },
+        "language": {
+            "type": "string",
+            "description": "The language of the code to be written the languages allowed are python java script, html and custom css if needed"
+        }
+      },
+      "required": ["file_path", "code", "language"]
+
+    }
+}

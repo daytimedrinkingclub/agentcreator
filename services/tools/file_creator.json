@@ -1,0 +1,27 @@
+{
+    "name": "file_creator",
+    "description": "This tool is used to create a new file in a project, this tool will create any file that is needed",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "project_name": { 
+            "type": "string", 
+            "description": "The path to the file where the code should be written to"
+        },
+        "file_name": {
+            "type": "string",
+            "description": "The code to be written in the file"
+        },
+        "file_path": {
+            "type": "string",
+            "description": "The path to the file where the code should be written to"
+        },
+        "file_extension": {
+            "type": "string",
+            "description": "The extension of the file to be created"
+        }
+      },
+      "required": ["project_name", "file_name", "file_path", "file_extension"]
+
+    }
+}
